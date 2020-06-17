@@ -13,15 +13,15 @@ print("hello! Let's get started")  # it printed "hello! Let's get started"
 
 some_words = ['what', 'does', 'this', 'line', 'do', '?']
 
-for word in some_words:
-    print(word)
+for word in some_words: # I think this will print "what does this line do ?"
+    print(word) 
 
-for x in some_words:
-    print(x)
+for x in some_words: # I think this will print "what does this line do ?"
+    print(x) 
 
-print(some_words)
+print(some_words) # I think this will print "['what', 'does', 'this', 'line', 'do', '?']"
 
-if len(some_words) > 3:
+if len(some_words) > 3: # If some_words has more than 3 words it will print the sentence
     print('some_words contains more than 3 words')
 
 def usefulFunction():
@@ -30,6 +30,6 @@ def usefulFunction():
     what the line below does:
     https://docs.python.org/3/library/platform.html#platform.uname
     """
-    print(platform.uname())
+    print(platform.uname()) # I think it shows the computers specs
 
 usefulFunction()
