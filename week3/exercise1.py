@@ -12,7 +12,12 @@ def loop_ranger(start, stop=None, step=1):
     The look up the docs for range(), you can answer this with just the range 
     function, but we'd like you to do it the long way, probably using a loop.
     """
-    return None
+    new_list = []
+
+    for i in range(start, stop, step):
+        new_list.append(i)
+
+    return new_list 
 
 
 def lone_ranger(start, stop, step):
@@ -20,7 +25,10 @@ def lone_ranger(start, stop, step):
 
     Look up the docs for range() and wrap it in a 1:1 way
     """
-    return None
+    list = []
+    for i in range(start, stop, step):
+        list.append(i)
+    return list
 
 
 def two_step_ranger(start, stop):
@@ -29,7 +37,11 @@ def two_step_ranger(start, stop):
     Sometimes you want to hide complexity.
     Make a range function that always has a step size of 2
     """
-    return None
+    two_step = []
+    for i in range(start, stop, 2):
+        two_step.append(i)
+    return two_step
+
 
 
 def stubborn_asker(low, high):
@@ -40,7 +52,14 @@ def stubborn_asker(low, high):
 
     Look up the docs for input
     """
-    return None
+    message = "Give me a number between {low} and {high}:".format(low=low, high=high)
+    while True:
+        input_number = int(input(message))
+        if low < input_number < high:
+            print("Sick! {} It's right.".format(input_number))
+            return input_number
+        else:
+            print("{input} isn't between {low} and {high}".format(input=input_number, low=low, high=high)) 
 
 
 def not_number_rejector(message):
@@ -50,7 +69,15 @@ def not_number_rejector(message):
     (e.g. "cow", "six", "8!") then throw it out and ask for an actual number.
     When you do get a number, return it.
     """
-    return None
+    message = "Give me a number!:"
+
+    while True:
+        try:
+            input_number = int(input(message))
+            print("{} is a number you right.".format(input_number))
+            return input_number
+        except Exception as e:
+            print("That ain't a number, go again ({})".format(e))
 
 
 def super_asker(low, high):
@@ -61,7 +88,16 @@ def super_asker(low, high):
     Try to call at least one of the other functions to minimise the
     amount of code.
     """
-    return None
+    Robust = False
+
+    while Robust == False:
+        guess = not_number_rejector("Guess a number: ")
+        if low < guess < high:
+            Robust = True
+            print("That's correct.")
+            return guess
+        elif guess < low or guess > high:
+            print("Not in range.")
 
 
 if __name__ == "__main__":
