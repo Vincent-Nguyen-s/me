@@ -26,9 +26,50 @@ def advancedGuessingGame():
     purpose if you can!
     """
 
-    return "You got it!"
-    # the tests are looking for the exact string "You got it!". Don't modify that!
+def not_number_rejector(message):
+    actual_number = False
+    
+    while not actual_number:
+        guess = str(input(message))
+        if guess.isdigit():
+            actual_number = True
+            return int(guess)
+        else:
+            print("Not a number")
 
+def advanceGuessingGame():
+    """Play a game with the user.
+
+    This is an example guessing game. It'll test as an example too.
+    """
+    print("\nWelcome to the guessing game!")
+    print("A number between 15 and _ ?")
+    upperBound = input("Enter an upper bound: ")
+    lowerBound = input("Enter a lower bound: ")
+    not_number_rejector(lowerBound)
+    print("OK then, a number between {lowerBound} and {upperBound} ?".format(lowerBound=lowerBound, upperBound=upperBound))
+    upperBound = int(upperBound)
+    lowerBound = int(lowerBound)
+    
+
+    actualNumber = random.randint(lowerBound, upperBound)
+
+    guessed = False
+
+    while not guessed:
+        guessedNumber = int(input("Guess a number: "))
+        print("You guessed {},".format(guessedNumber),)
+        if guessedNumber == actualNumber:
+            print("You got it!! It was {}".format(actualNumber))
+            guessed = True
+        elif guessedNumber < actualNumber:
+            print("Too small, try again :'(")
+        elif guessedNumber < lowerBound or guessedNumber > upperBound:
+            print("I think you didn't get it buddy.")
+
+        else:
+            print("Too big, try again :'(")
+        return "You got it!"
 
 if __name__ == "__main__":
     print(advancedGuessingGame())
