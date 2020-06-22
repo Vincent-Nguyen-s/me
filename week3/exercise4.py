@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Week 3, Exercise 4."""
 
 
@@ -8,7 +7,6 @@ import math
 
 def binary_search(low, high, actual_number):
     """Do a binary search.
-
     This is going to be your first 'algorithm' in the usual sense of the word!
     you'll give it a range to guess inside, and then use binary search to home
     in on the actual_number.
@@ -25,6 +23,18 @@ def binary_search(low, high, actual_number):
     """
     tries = 0
     guess = 0
+
+    while high >= low:
+        guess = ((low+high)/2)
+        tries = tries + 1
+        if guess > actual_number:
+            print("Guess number {tries}: {guess}".format(tries=tries, guess=guess))
+            high = guess - 1
+        elif guess < actual_number:
+            print("Guess number {tries}: {guess}".format(tries=tries, guess=guess))
+            low = guess + 1
+        elif guess == actual_number:
+            break
     return {"guess": guess, "tries": tries}
 
 
