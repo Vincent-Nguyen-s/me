@@ -6,20 +6,28 @@ import os
 import requests
 import inspect
 import sys
+import random
+import string
 
-# Handy constants
-LOCAL = os.path.dirname(os.path.realpath(__file__))  # the context of this file
-CWD = os.getcwd()  # The curent working directory
+
+LOCAL = os.path.dirname(os.path.realpath(__file__)) 
+CWD = os.getcwd() 
 if LOCAL != CWD:
     print("Be careful that your relative paths are")
     print("relative to where you think they are")
     print("LOCAL", LOCAL)
     print("CWD", CWD)
 
+def randomString(length=8):
+    url = "https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={stringLength}"
+    url = url.format(stringLength=length)
+    r = requests.get(url)
+    if r.status_code is 200:
+        random_word = r.content
+    return random_word
 
 def get_some_details():
     """Parse some JSON.
-
     In lazyduck.json is a description of a person from https://randomuser.me/
     Read it in and use the json library to convert it to a dictionary.
     Return a new dictionary that just has the last name, password, and the
@@ -34,14 +42,14 @@ def get_some_details():
          dictionaries.
     """
     json_data = open(LOCAL + "/lazyduck.json").read()
-
     data = json.loads(json_data)
-    return {"lastName": None, "password": None, "postcodePlusID": None}
+ 
+    return {"lastName": data["results"][0]["name"]["last"], "password": data["results"][0]["login"]["password"], 
+    "postcodePlusID": data["results"][0]["location"]["postcode"] + int(data["results"][0]["id"]["value"])}
 
 
 def wordy_pyramid():
     """Make a pyramid out of real words.
-
     There is a random word generator here:
     http://api.wordnik.com/v4/words.json/randomWords?api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5&minLength=10&maxLength=10&limit=1
     The arguments that the generator takes is the minLength and maxLength of the word
@@ -74,12 +82,24 @@ def wordy_pyramid():
     ]
     TIP: to add an argument to a URL, use: ?argName=argVal e.g. &minLength=
     """
-    pass
+
+    Numberlist = list(range(3,21,2))
+    Numberlist.extend(list(range(20,2,-2)))
+    
+    NumberPyramid = []
+    url = "https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={len}"
+    
+    for i in Numberlist:
+        fullurl = url.format(len=i)
+        pull = requests.get(fullurl)       
+        data = pull.text
+        NumberPyramid.append(data)
+    return NumberPyramid
+
 
 
 def pokedex(low=1, high=5):
     """ Return the name, height and weight of the tallest pokemon in the range low to high.
-
     Low and high are the range of pokemon ids to search between.
     Using the Pokemon API: https://pokeapi.co get some JSON using the request library
     (a working example is filled in below).
@@ -92,17 +112,33 @@ def pokedex(low=1, high=5):
          variable and then future access will be easier.
     """
     template = "https://pokeapi.co/api/v2/pokemon/{id}"
+    the_json = None
 
-    url = template.format(id=5)
-    r = requests.get(url)
-    if r.status_code is 200:
-        the_json = json.loads(r.text)
-    return {"name": None, "weight": None, "height": None}
+    height = -1
+    weight = -1
+    name = ""
+
+
+    while low < high:
+        url = template.format(id=low)
+        r = requests.get(url)
+
+        if r.status_code == 200:
+            the_json = json.loads(r.text)
+            
+        if the_json != None and the_json["height"] > height:
+
+                height = the_json["height"] 
+                weight = the_json["weight"]
+                name = the_json["name"]
+        low = low + 1
+
+
+    return {"name": name, "weight": weight, "height": height}
 
 
 def diarist():
     """Read gcode and find facts about it.
-
     Read in Trispokedovetiles(laser).gcode and count the number of times the
     laser is turned on and off. That's the command "M10 P1".
     Write the answer (a number) to a file called 'lasers.pew' in the week4 directory.
@@ -114,7 +150,17 @@ def diarist():
          the test will have nothing to look at.
     TIP: this might come in handy if you need to hack a 3d print file in the future.
     """
+    data = open(LOCAL + "/Trispokedovetiles(laser).gcode").read()
+    Laser_number = data.count("M10 P1")
+    
+    #Write it to file
+    mode = "w"  # from the docs
+    laser = open("/lasers.pew", mode)
+    laser.write(str(Laser_number))
+    laser.close()
+
     pass
+
 
 
 if __name__ == "__main__":
@@ -130,3 +176,5 @@ if __name__ == "__main__":
             print(e)
     if not os.path.isfile("lasers.pew"):
         print("diarist did not create lasers.pew")
+
+    diarist()
