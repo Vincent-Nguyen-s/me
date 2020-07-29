@@ -11,28 +11,34 @@ import time
 
 def string_please() -> str:
     """Returns a string, anything you like."""
-    return " "
+    random_string = str()
+    return random_string
 
 
 def list_please() -> list:
     """Returns a list, anything you like."""
-    return []
+    random_list = []
+    return random_list
 
 
 def dictionary_please() -> dict:
     """Returns a dictionary, anything you like."""
-    return {}
+    dictionary = dict()
+    return dictionary
 
 
 def is_it_5(some_number) -> bool:
     """Returns True if the argument passed is 5, otherwise returns False."""
     if some_number == 5:
         return True
-    return False
+    else:
+        return False
+
 
 def take_five(some_number) -> int:
     """Subtracts 5 from some_number."""
-    return None
+    result = some_number - 5
+    return result
 
 
 def greet(name="Towering Timmy"):
@@ -40,7 +46,7 @@ def greet(name="Towering Timmy"):
     return a string of "Hello " and the name argument.
     E.g. if given as "Towering Timmy" it should return "Hello Towering Timmy"
     """
-    return None
+    return "Hello" + " " + name
 
 
 def three_counter(input_list=[1, 4, 3, 5, 7, 1, 3, 2, 3, 3, 5, 3, 7]):
@@ -48,7 +54,10 @@ def three_counter(input_list=[1, 4, 3, 5, 7, 1, 3, 2, 3, 3, 5, 3, 7]):
     Return an integer.
     TIP: the test will use a different input_list, so don't just return 5
     """
-
+    count = 0
+    for i in input_list:
+        if i == 3:
+            count += 1 
     return count
 
 
@@ -56,7 +65,10 @@ def n_counter(search_for_this, input_list=[1, 4, 3, 5, 7, 1, 3, 2, 3, 3, 5, 3, 7
     """Count the number of times search_for_this shows up in the input_list.
     Return an integer.
     """
-
+    count = 0 
+    for i in input_list:
+        if i == search_for_this:
+            count += 1
     return count
 
 
@@ -77,7 +89,15 @@ def fizz_buzz():
     """
     fizzBuzzList = []
     # your code here
-
+    for i in range(1,101):
+        if i%3==0 and i%5==0:
+            fizzBuzzList.append("FizzBuzz")
+        elif i%3==0:    
+            fizzBuzzList.append("Fizz")
+        elif i%5==0:    
+            fizzBuzzList.append("Buzz")    
+        else:
+            fizzBuzzList.append(i)
     return fizzBuzzList
 
 
@@ -91,9 +111,10 @@ def put_behind_bars(input_string="very naughty boy"):
     TIP: consider using the 'join' method in Python.
     TIP: make sure that you have a pipe on both ends of the string.
     """
-
-    return None
-
+    the_list = list(input_string)
+    bars = "|" 
+    result = bars.join(the_list)
+    return bars + result + bars
 
 def pet_filter(letter="a"):
     """Return a list of pets whose name contains the character 'letter'"""
@@ -108,10 +129,9 @@ def pet_filter(letter="a"):
             "siamese fighting fish","fancy rat and lab rat","mink","red fox",
             "hedgehog","guppy",]
     # fmt: on
-    filtered = []
-
+    filtered = [filtered for filtered in pets if letter in filtered]
     return filtered
-
+    
 
 def best_letter_for_pets():
     """Return the letter that is present at least once in the most pet names.
@@ -119,10 +139,14 @@ def best_letter_for_pets():
     TIP: return just a letter, not the list of animals.
     """
     import string
-
     the_alphabet = string.ascii_lowercase
+    longest_list = -1
     popular_letter = ""
-
+    for letter in the_alphabet:
+        x = len(pet_filter(letter))
+        if x > longest_list:
+            longest_list = x
+            popular_letter = letter
     return popular_letter
 
 
@@ -152,10 +176,15 @@ def make_filler_text_dictionary():
     """
 
     import requests
-
-    url = "https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength="
+    
+    url = "https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={length}"
     wd = {}
-
+    for i in range(3, 8):
+        wd[i] = []
+        api = url.format(length=i)
+        for j in range(3):
+            r = requests.get(api)
+            wd[i].append(r.text)
     return wd
 
 
@@ -172,8 +201,12 @@ def random_filler_text(number_of_words=200):
     import random
 
     my_dict = make_filler_text_dictionary()
-
-    return " ".join(words)
+    random_words = []
+    for i in range(number_of_words):
+        word_length = random.randint(3,7)
+        word_chosen = random.randint(0,2)
+        random_words.append(my_dict[word_length][word_chosen])
+    return " ".join(random_words)
 
 
 def fast_filler(number_of_words=200):
@@ -195,7 +228,27 @@ def fast_filler(number_of_words=200):
 
     fname = "dict_racey.json"
 
-    return None
+    if os.path.isfile(fname):
+        print("loading from file")
+    else:
+        dictt = make_filler_text_dictionary()
+        f = open(fname, "w")
+        abba = json.dumps(dictt)
+        f.write(abba)
+        f.close
+    
+    f=open(fname, "r")
+    content= f.read()
+    dictionary = json.loads(content)
+    
+    the_list = []
+
+    for i in range(number_of_words):
+        word_length = str(random.randint(3, 7))
+        word_index = random.randint(0, 2)
+        the_list.append(dictionary[word_length][word_index].capitalize())
+
+    return " ".join(the_list) + "."
 
 
 if __name__ == "__main__":
