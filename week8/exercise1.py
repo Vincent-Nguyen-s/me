@@ -111,10 +111,9 @@ def put_behind_bars(input_string="very naughty boy"):
     TIP: consider using the 'join' method in Python.
     TIP: make sure that you have a pipe on both ends of the string.
     """
-    the_list = list(input_string)
-    bars = "|" 
-    result = bars.join(the_list)
-    return bars + result + bars
+    bars = list(input_string)
+    bars = "|".join(bars)
+    return "|" + bars + "|"
 
 def pet_filter(letter="a"):
     """Return a list of pets whose name contains the character 'letter'"""
@@ -139,13 +138,14 @@ def best_letter_for_pets():
     TIP: return just a letter, not the list of animals.
     """
     import string
+
     the_alphabet = string.ascii_lowercase
-    longest_list = -1
+    longest = -1
     popular_letter = ""
     for letter in the_alphabet:
         x = len(pet_filter(letter))
-        if x > longest_list:
-            longest_list = x
+        if x > longest:
+            longest = x
             popular_letter = letter
     return popular_letter
 
@@ -200,13 +200,13 @@ def random_filler_text(number_of_words=200):
     """
     import random
 
-    my_dict = make_filler_text_dictionary()
-    random_words = []
-    for i in range(number_of_words):
-        word_length = random.randint(3,7)
-        word_chosen = random.randint(0,2)
-        random_words.append(my_dict[word_length][word_chosen])
-    return " ".join(random_words)
+    my_dick = make_filler_text_dictionary()
+    words = []
+    for _ in range(number_of_words):
+        word_length = random.randint(3, 6)
+        word_index = random.randint(0, 2)
+        words.append(my_dick[word_length][word_index])
+    return " ".join(words)
 
 
 def fast_filler(number_of_words=200):
